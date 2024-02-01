@@ -16,7 +16,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ##                                 Global Dependecies                       ##
 ##############################################################################
 #POSIX standards-compliant default locale. Only strict ASCII characters are valid, extended to allow the basic use of UTF-8
-ENV LANG C.UTF-8 
+ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV LC_ALL=C
 
@@ -84,7 +84,7 @@ RUN groupadd -g "$GID" "$USER"  && \
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /etc/bash.bashrc
 RUN echo "export ROS_DOMAIN_ID=${DOMAIN_ID}" >> /etc/bash.bashrc
 
-USER $USER 
+USER $USER
 RUN mkdir -p /home/$USER/ros2_ws/src
 
 ##############################################################################
@@ -122,12 +122,12 @@ COPY --chown=$USER:$USER thirdparty /home/$USER/dependecies_ws
 #     make -j$(nproc) && \
 #     make install
 
-# VTK 8.1.1 
+# VTK 8.1.1
 RUN cd /home/$USER/dependecies_ws/VTK-8.1.1 && \
     mkdir build && \
     cd build && \
     cmake .. && \
-    make -j 4 && \
+    make -j$(nproc) && \
     sudo make install
 
 # PCL 1.9.1
@@ -135,7 +135,7 @@ RUN cd /home/$USER/dependecies_ws/pcl && \
     mkdir build && \
     cd build && \
     cmake .. && \
-    make -j 4 && \
+    make -j$(nproc) && \
     sudo make install
 
 # OpenCV 4.4.0
@@ -143,15 +143,18 @@ RUN cd /home/$USER/dependecies_ws/opencv && \
     mkdir build && \
     cd build && \
     cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_CXX_STANDARD=14 -D CMAKE_INSTALL_PREFIX=/usr/local .. && \
-    make -j 4 && \
+    make -j$(nproc) && \
     sudo make install
 
-RUN cd octomap && \
+RUN cd /home/$USER/dependecies_ws/octomap && \
     mkdir build && \
     cd build && \
     cmake .. && \
-    make -j 4&& \
+    make -j$(nproc) && \
     sudo make install
+
+# RUN cd /home/$USER/dependecies_ws/gurobi911/linux64 && \
+#     python setup.py install
 
 # RUN cd ..
 

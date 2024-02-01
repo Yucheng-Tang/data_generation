@@ -9,7 +9,7 @@ git checkout 4.4.0
 cd ..
 git clone https://github.com/PointCloudLibrary/pcl.git
 cd pcl
-git checkout pcl-1.8.1
+git checkout pcl-1.9.1
 
 cd ..
 git clone https://github.com/OctoMap/octomap.git
